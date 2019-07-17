@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,15 +26,18 @@ import com.zeeshan.vo.UserVO;
 @Transactional
 public class UserServiceImpl implements UserService {
 
+	private static final Logger logger = Logger.getLogger(UserServiceImpl.class);
+
 	@Autowired
 	private UserDAO userDAO;
 
 	@Override
 	@Transactional
 	public void addUser(UserVO user) throws ParseException {
-		System.out.println("service save method");
+
+		logger.info("addUser method");
+
 		UserBO bo = new UserBO();
-		// bo.setId(Integer.parseInt(user.getId()));
 		bo.setName(user.getName());
 		bo.setEmail(user.getEmail());
 		bo.setMobileNo(Long.parseLong(user.getMobileNo()));
@@ -51,6 +55,9 @@ public class UserServiceImpl implements UserService {
 	@Override
 	@Transactional
 	public void updateUser(UserVO user) throws ParseException {
+
+		logger.info("updateUser method");
+
 		UserBO bo = new UserBO();
 		bo.setId(Integer.parseInt(user.getId()));
 		bo.setName(user.getName());
@@ -67,6 +74,9 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public UserVO getUser(int id) {
+
+		logger.info("getUser method");
+
 		UserBO bo = userDAO.getUser(id);
 		UserVO user = new UserVO();
 		user.setId(bo.getId().toString());
@@ -84,14 +94,18 @@ public class UserServiceImpl implements UserService {
 	@Override
 	@Transactional
 	public void deleteUser(int id) {
+		logger.info("deleteUser method");
 		userDAO.deleteUser(id);
 
 	}
 
 	@Override
 	public List<UserVO> getUsers() {
+	
+		logger.info("getUsers method");
 		List<UserBO> list = userDAO.getUsers();
 		List<UserVO> listVO = new ArrayList<UserVO>();
+		
 		for (UserBO bo : list) {
 			Integer day = 0, month = 0, year = 0;
 			UserVO vo = new UserVO();
@@ -117,6 +131,8 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public Period calculateDate(Date date) {
 
+		logger.info("calculateDate method");
+		
 		Instant instant = Instant.ofEpochMilli(date.getTime());
 		LocalDateTime localDateTime = LocalDateTime.ofInstant(instant, ZoneId.systemDefault());
 		LocalDate localDate = localDateTime.toLocalDate();
