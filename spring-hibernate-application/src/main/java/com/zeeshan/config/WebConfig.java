@@ -1,3 +1,4 @@
+
 package com.zeeshan.config;
 
 import java.util.Properties;
@@ -5,6 +6,7 @@ import java.util.Properties;
 import javax.sql.DataSource;
 
 import org.apache.commons.dbcp.BasicDataSource;
+import org.apache.log4j.Logger;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
@@ -32,6 +34,8 @@ import org.springframework.web.servlet.view.JstlView;
 @EnableWebMvc
 public class WebConfig extends WebMvcConfigurerAdapter {
 
+	private static final Logger logger = Logger.getLogger(WebConfig.class);
+
 	private static final String PROPERTY_NAME_DATABASE_DRIVER = "db.driver";
 	private static final String PROPERTY_NAME_DATABASE_PASSWORD = "db.password";
 	private static final String PROPERTY_NAME_DATABASE_URL = "db.url";
@@ -49,6 +53,7 @@ public class WebConfig extends WebMvcConfigurerAdapter {
 
 	@Bean
 	public MessageSource messageSource() {
+		logger.info("messageSource method");
 		ResourceBundleMessageSource rbms = new ResourceBundleMessageSource();
 		rbms.setBasename("error");
 		return rbms;
@@ -56,13 +61,15 @@ public class WebConfig extends WebMvcConfigurerAdapter {
 
 	@Override
 	public Validator getValidator() {
+		logger.info("getVelidate method");
 		LocalValidatorFactoryBean validator = new LocalValidatorFactoryBean();
 		validator.setValidationMessageSource(messageSource());
 		return validator;
 	}
-	
+
 	@Bean
 	public DataSource dataSource() {
+		logger.info("dataSource method");
 		BasicDataSource dataSource = new BasicDataSource();
 		// DriverManagerDataSource dataSource = new DriverManagerDataSource();
 		dataSource.setDriverClassName(enviroment.getRequiredProperty(PROPERTY_NAME_DATABASE_DRIVER));
@@ -75,6 +82,7 @@ public class WebConfig extends WebMvcConfigurerAdapter {
 
 	@Bean
 	public LocalSessionFactoryBean sessionFactory() {
+		logger.info("sessionFactory method");
 		LocalSessionFactoryBean localSessionFactoryBean = new LocalSessionFactoryBean();
 		localSessionFactoryBean.setDataSource(dataSource());
 		localSessionFactoryBean
@@ -84,6 +92,7 @@ public class WebConfig extends WebMvcConfigurerAdapter {
 	}
 
 	public Properties hibernateProperties() {
+		logger.info("hibernateProperties method");
 		Properties properties = new Properties();
 		properties.put(PROPERTY_NAME_HIBERNATE_DIALECT,
 				enviroment.getRequiredProperty(PROPERTY_NAME_HIBERNATE_DIALECT));
@@ -106,6 +115,7 @@ public class WebConfig extends WebMvcConfigurerAdapter {
 	@Bean
 	@Autowired
 	public HibernateTransactionManager transactionManager(SessionFactory sessionFactory) {
+		logger.info("transactionManager method");
 		HibernateTransactionManager txMgr = new HibernateTransactionManager();
 		txMgr.setSessionFactory(sessionFactory);
 		return txMgr;
@@ -113,6 +123,7 @@ public class WebConfig extends WebMvcConfigurerAdapter {
 
 	@Bean
 	public InternalResourceViewResolver viewResolver() {
+		logger.info("viewResolver method");
 		InternalResourceViewResolver irvr = new InternalResourceViewResolver();
 		irvr.setPrefix("/WEB-INF/pages/");
 		irvr.setSuffix(".jsp");
