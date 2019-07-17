@@ -4,11 +4,13 @@ import javax.persistence.Column;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
+import org.apache.log4j.Logger;
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotEmpty;
 
 public class UserVO {
 
+	Logger logger = Logger.getLogger(UserVO.class);
 	private String id;
 
 	@Size(max = 50, min = 3, message = "{user.name.empty}")
@@ -24,14 +26,13 @@ public class UserVO {
 	@Column(updatable = false)
 	private String mobileNo;
 
-	
 	@Pattern(regexp = "^(3[01]|[12][0-9]|0[1-9])-(1[0-2]|0[1-9])-[0-9]{4}$", message = "{user.dob.invalid}")
 	private String dob;
 
 	private String days;
 	private String months;
 	private String years;
-	
+
 	public String getId() {
 		return id;
 	}
