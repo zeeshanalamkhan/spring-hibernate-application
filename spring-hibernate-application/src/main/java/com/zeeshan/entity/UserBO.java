@@ -11,11 +11,14 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import org.apache.log4j.Logger;
 import org.hibernate.annotations.GenericGenerator;
 
 @Entity
 @Table(name = "USERS")
 public class UserBO implements Serializable {
+
+	private static final Logger logger = Logger.getLogger(UserBO.class);
 
 	private static final long serialVersionUID = 1L;
 
